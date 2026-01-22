@@ -7,6 +7,8 @@ services:
     repo: https://github.com/YOUR_USERNAME/falsifeye
     branch: main
     dockerfilePath: ./Dockerfile
+    ports:
+      - port: 8081
     healthCheckPath: /
     envVars:
       - key: PYTHONUNBUFFERED
