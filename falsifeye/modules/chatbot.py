@@ -1,11 +1,8 @@
 import json
 import os
-import torch
-from sentence_transformers import SentenceTransformer, util
 
 class ForensicKnowledgeBase:
     def __init__(self, kb_path=None):
-        print("Importing AI libraries and loading model...")
         if kb_path is None:
             # Use absolute path relative to this file
             self.kb_path = os.path.join(os.path.dirname(__file__), 'forensic_knowledge.json')
@@ -15,16 +12,9 @@ class ForensicKnowledgeBase:
         self.model = None
         self.corpus_embeddings = None
         self.kb_data = []
+        self._model_loaded = False
 
-        try:
-            # Force CPU to avoid potential CUDA/GPU crashes on startup if GPU is problematic
-            self.model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
-            print("SentenceTransformer model loaded on CPU.")
-        except Exception as e:
-            print(f"CRITICAL ERROR: Failed to load SentenceTransformer model: {e}")
-            return
-
-        # Load Knowledge Base
+        # Load Knowledge Base (lightweight, no model needed)
         if os.path.exists(self.kb_path):
             try:
                 with open(self.kb_path, 'r') as f:
@@ -36,7 +26,23 @@ class ForensicKnowledgeBase:
         else:
             print(f"WARNING: Knowledge base file not found at {self.kb_path}")
             self.kb_data = []
-            
+    
+    def _load_model(self):
+        """Lazy-load SentenceTransformer model only on first use."""
+        if self._model_loaded:
+            return
+        
+        print("Loading AI chatbot model (SentenceTransformer)... this may take a moment.")
+        try:
+            from sentence_transformers import SentenceTransformer
+            # Force CPU to avoid potential CUDA/GPU crashes if GPU is problematic
+            self.model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+            print("SentenceTransformer model loaded on CPU.")
+        except Exception as e:
+            print(f"ERROR: Failed to load SentenceTransformer model: {e}")
+            self._model_loaded = False
+            return
+        
         # Pre-compute embeddings for all KB entries
         if self.kb_data and self.model:
             try:
@@ -46,18 +52,28 @@ class ForensicKnowledgeBase:
                     convert_to_tensor=True
                 )
                 print("Embeddings computed successfully.")
+                self._model_loaded = True
             except Exception as e:
                 print(f"ERROR: Failed to compute embeddings: {e}")
+                self._model_loaded = False
 
     def find_best_match(self, query):
         """
         Uses Semantic Search to find the most relevant expert response.
+        Lazy-loads the model on first call.
         """
+        # Load model on first use
+        if not self._model_loaded:
+            self._load_model()
+        
         if self.model is None or self.corpus_embeddings is None:
             print("DEBUG: Model or embeddings not initialized.")
             return None
 
         try:
+            from sentence_transformers import util
+            import torch
+            
             query_embedding = self.model.encode(query, convert_to_tensor=True)
             
             # Compute cosine similarity
@@ -76,18 +92,13 @@ class ForensicKnowledgeBase:
             
         return None
 
-# Initialize Global Instance (Load model once)
-# This might take a few seconds on startup, but subsequent queries are instant.
+# Initialize Global Instance (lightweight, no model loading)
 kb_engine = None
 try:
-    print("Loading Forensic AI Chatbot Model...")
     kb_engine = ForensicKnowledgeBase()
-    if kb_engine.model is None:
-         print("WARNING: Forensic AI Chatbot Model failed to initialize properly (model is None).")
-    else:
-        print("Forensic AI Chatbot Model Loaded Successfully.")
+    print("Forensic AI Chatbot Knowledge Base Initialized (model will load on first query).")
 except Exception as e:
-    print(f"ERROR loading Forensic AI Chatbot Model: {e}")
+    print(f"ERROR initializing Forensic AI Chatbot: {e}")
     kb_engine = None
 
 def get_chat_response(user_query, context):
