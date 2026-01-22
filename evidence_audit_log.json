@@ -1,0 +1,223 @@
+[
+    {
+        "case_id": "5f02e044",
+        "filename": "IMG_8927.MOV",
+        "file_path": "c:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\IMG_8927.MOV",
+        "sha256_hash": "8c48e8808004c5f12e566daffa5305393e576eebac436b1c8f3d51613e4c2d88",
+        "timestamp": "2025-12-04T22:58:58.770159",
+        "status": "ingested"
+    },
+    {
+        "case_id": "5f02e044",
+        "sha256_hash": "8c48e8808004c5f12e566daffa5305393e576eebac436b1c8f3d51613e4c2d88",
+        "timestamp": "2025-12-04T22:59:58.106854",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "IMG_8927.MOV",
+            "type": "video",
+            "file_hash": "8c48e8808004c5f12e566daffa5305393e576eebac436b1c8f3d51613e4c2d88",
+            "score": 10,
+            "details": "Analyzed 51 frames.",
+            "report_path": "report_5f02e044.pdf"
+        }
+    },
+    {
+        "case_id": "d274e86e",
+        "filename": "3a1fb45a-e42c-4426-8ba0-a90afabd6479.png",
+        "file_path": "c:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\3a1fb45a-e42c-4426-8ba0-a90afabd6479.png",
+        "sha256_hash": "afde9ec5f8a6559a178f498cfd83d957af08f1e17429b34d2791951b3b9900d7",
+        "timestamp": "2025-12-04T23:22:36.941464",
+        "status": "ingested"
+    },
+    {
+        "case_id": "d274e86e",
+        "sha256_hash": "afde9ec5f8a6559a178f498cfd83d957af08f1e17429b34d2791951b3b9900d7",
+        "timestamp": "2025-12-04T23:22:37.432460",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "3a1fb45a-e42c-4426-8ba0-a90afabd6479.png",
+            "type": "image",
+            "file_hash": "afde9ec5f8a6559a178f498cfd83d957af08f1e17429b34d2791951b3b9900d7",
+            "score": 30,
+            "details": "ELA levels normal (22). Abnormal frequency spectrum detected (potential GAN artifacts).",
+            "report_path": "report_d274e86e.pdf"
+        }
+    },
+    {
+        "case_id": "3101a7b5",
+        "filename": "friendship_friends_friendshipquotes_happy_happiest_quotes_quotations_bond_captions.jpg",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\friendship_friends_friendshipquotes_happy_happiest_quotes_quotations_bond_captions.jpg",
+        "sha256_hash": "5b9a933b975d986fb52c3a8c6580cd6b58928e126d2fdb7d257dcf1918b633f4",
+        "timestamp": "2025-12-04T23:56:24.191000",
+        "status": "ingested"
+    },
+    {
+        "case_id": "3101a7b5",
+        "sha256_hash": "5b9a933b975d986fb52c3a8c6580cd6b58928e126d2fdb7d257dcf1918b633f4",
+        "timestamp": "2025-12-04T23:56:24.262013",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "friendship_friends_friendshipquotes_happy_happiest_quotes_quotations_bond_captions.jpg",
+            "type": "image",
+            "file_hash": "5b9a933b975d986fb52c3a8c6580cd6b58928e126d2fdb7d257dcf1918b633f4",
+            "score": 30,
+            "details": "ELA levels normal (10). Abnormal frequency spectrum detected (potential GAN artifacts).",
+            "report_path": "report_3101a7b5.pdf"
+        }
+    },
+    {
+        "case_id": "da7a942c",
+        "filename": "Submission_cit.pdf",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\Submission_cit.pdf",
+        "sha256_hash": "98da3b432031613ef2816455f9cb75a808233c4a8c4ecc019929d3742137ff55",
+        "timestamp": "2026-01-11T20:02:52.257733",
+        "status": "ingested"
+    },
+    {
+        "case_id": "da7a942c",
+        "sha256_hash": "98da3b432031613ef2816455f9cb75a808233c4a8c4ecc019929d3742137ff55",
+        "timestamp": "2026-01-11T20:02:52.300203",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "Submission_cit.pdf",
+            "type": "document",
+            "file_hash": "98da3b432031613ef2816455f9cb75a808233c4a8c4ecc019929d3742137ff55",
+            "score": 0,
+            "details": "PyPDF2 not installed. Cannot analyze documents.",
+            "report_path": "report_da7a942c.pdf"
+        }
+    },
+    {
+        "case_id": "39a997f7",
+        "filename": "report_da7a942c.pdf",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\report_da7a942c.pdf",
+        "sha256_hash": "e945eb6810749a4dc249a24b392935b00eeea59aeec64eb11e4fca15dc63e5b5",
+        "timestamp": "2026-01-11T20:07:02.729935",
+        "status": "ingested"
+    },
+    {
+        "case_id": "39a997f7",
+        "sha256_hash": "e945eb6810749a4dc249a24b392935b00eeea59aeec64eb11e4fca15dc63e5b5",
+        "timestamp": "2026-01-11T20:07:02.941984",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "report_da7a942c.pdf",
+            "type": "document",
+            "file_hash": "e945eb6810749a4dc249a24b392935b00eeea59aeec64eb11e4fca15dc63e5b5",
+            "score": 10,
+            "details": "Producer: ReportLab PDF Library - (opensource), Creator: (unspecified) | Metadata appears consistent with standard generation.",
+            "report_path": "report_39a997f7.pdf"
+        }
+    },
+    {
+        "case_id": "40355ebc",
+        "filename": "Schedule.png",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\Schedule.png",
+        "sha256_hash": "7b571dfa29751b1e14ef9ecdef7a14fcfd05ac871c75d6179c48b4941e122b8d",
+        "timestamp": "2026-01-11T20:07:46.818836",
+        "status": "ingested"
+    },
+    {
+        "case_id": "40355ebc",
+        "sha256_hash": "7b571dfa29751b1e14ef9ecdef7a14fcfd05ac871c75d6179c48b4941e122b8d",
+        "timestamp": "2026-01-11T20:07:47.472902",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "Schedule.png",
+            "type": "image",
+            "file_hash": "7b571dfa29751b1e14ef9ecdef7a14fcfd05ac871c75d6179c48b4941e122b8d",
+            "score": 30,
+            "details": "ELA levels normal (36). Abnormal frequency spectrum detected (potential GAN artifacts).",
+            "report_path": "report_40355ebc.pdf"
+        }
+    },
+    {
+        "case_id": "493281d4",
+        "filename": "report_40355ebc.pdf",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\report_40355ebc.pdf",
+        "sha256_hash": "377674a6ee05d75d83a6fe2b11bc591447f46554a041c62091176a21ad507e0e",
+        "timestamp": "2026-01-11T20:12:44.337976",
+        "status": "ingested"
+    },
+    {
+        "case_id": "493281d4",
+        "sha256_hash": "377674a6ee05d75d83a6fe2b11bc591447f46554a041c62091176a21ad507e0e",
+        "timestamp": "2026-01-11T20:12:44.354029",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "report_40355ebc.pdf",
+            "type": "document",
+            "file_hash": "377674a6ee05d75d83a6fe2b11bc591447f46554a041c62091176a21ad507e0e",
+            "score": 10,
+            "details": "Producer: ReportLab PDF Library - (opensource), Creator: (unspecified) | Metadata appears consistent with standard generation.",
+            "report_path": "report_493281d4.pdf"
+        }
+    },
+    {
+        "case_id": "1bf6e3c7",
+        "filename": "8.mp3",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\8.mp3",
+        "sha256_hash": "5516f3a5d7385e0526d0da77b15215fa83dce9f721e396a0568215595f8165ba",
+        "timestamp": "2026-01-11T20:13:13.848391",
+        "status": "ingested"
+    },
+    {
+        "case_id": "1bf6e3c7",
+        "sha256_hash": "5516f3a5d7385e0526d0da77b15215fa83dce9f721e396a0568215595f8165ba",
+        "timestamp": "2026-01-11T20:13:51.326834",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "8.mp3",
+            "type": "audio",
+            "file_hash": "5516f3a5d7385e0526d0da77b15215fa83dce9f721e396a0568215595f8165ba",
+            "score": 10,
+            "details": "Voice Variance: 1728.62.",
+            "transcription": "Error during transcription: [WinError 2] The system cannot find the file specified",
+            "report_path": "report_1bf6e3c7.pdf"
+        }
+    },
+    {
+        "case_id": "97a45915",
+        "filename": "WhatsApp_Image_2025-06-16_at_13.09.28_1248edf6.jpg",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\WhatsApp_Image_2025-06-16_at_13.09.28_1248edf6.jpg",
+        "sha256_hash": "dfa84e93f0f3b44c911e5126d54d2bbaedeef7dbc8bc26cd4c093daaa0c06be1",
+        "timestamp": "2026-01-11T20:15:42.533377",
+        "status": "ingested"
+    },
+    {
+        "case_id": "97a45915",
+        "sha256_hash": "dfa84e93f0f3b44c911e5126d54d2bbaedeef7dbc8bc26cd4c093daaa0c06be1",
+        "timestamp": "2026-01-11T20:15:42.675886",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "WhatsApp_Image_2025-06-16_at_13.09.28_1248edf6.jpg",
+            "type": "image",
+            "file_hash": "dfa84e93f0f3b44c911e5126d54d2bbaedeef7dbc8bc26cd4c093daaa0c06be1",
+            "score": 30,
+            "details": "ELA levels normal (23). Abnormal frequency spectrum detected (potential GAN artifacts).",
+            "report_path": "report_97a45915.pdf"
+        }
+    },
+    {
+        "case_id": "82b9bfbb",
+        "filename": "report_40355ebc.pdf",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\report_40355ebc.pdf",
+        "sha256_hash": "377674a6ee05d75d83a6fe2b11bc591447f46554a041c62091176a21ad507e0e",
+        "timestamp": "2026-01-11T20:30:14.442836",
+        "status": "ingested"
+    },
+    {
+        "case_id": "82b9bfbb",
+        "sha256_hash": "377674a6ee05d75d83a6fe2b11bc591447f46554a041c62091176a21ad507e0e",
+        "timestamp": "2026-01-11T20:30:14.464487",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "report_40355ebc.pdf",
+            "type": "document",
+            "file_hash": "377674a6ee05d75d83a6fe2b11bc591447f46554a041c62091176a21ad507e0e",
+            "score": 10,
+            "details": "Producer: ReportLab PDF Library - (opensource), Creator: (unspecified) | Metadata appears consistent with standard generation.",
+            "report_path": "report_82b9bfbb.pdf"
+        }
+    }
+]

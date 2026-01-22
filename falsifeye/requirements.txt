@@ -1,0 +1,15 @@
+flask
+reportlab
+Pillow
+textblob
+opencv-python
+librosa
+numpy
+scipy
+PyPDF2
+openai-whisper
+sentence-transformers
+nltk
+torch
+scikit-learn
+numba

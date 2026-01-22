@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: falsifeye
+    runtime: docker
+    region: oregon
+    plan: starter
+    repo: https://github.com/YOUR_USERNAME/falsifeye
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: FLASK_ENV
+        value: production

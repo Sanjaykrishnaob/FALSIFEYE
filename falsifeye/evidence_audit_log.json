@@ -1,0 +1,90 @@
+[
+    {
+        "case_id": "20d0ae9a",
+        "filename": "IMG_8927.MOV",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\IMG_8927.MOV",
+        "sha256_hash": "8c48e8808004c5f12e566daffa5305393e576eebac436b1c8f3d51613e4c2d88",
+        "timestamp": "2025-12-06T12:40:50.856746",
+        "status": "ingested"
+    },
+    {
+        "case_id": "20d0ae9a",
+        "sha256_hash": "8c48e8808004c5f12e566daffa5305393e576eebac436b1c8f3d51613e4c2d88",
+        "timestamp": "2025-12-06T12:42:00.873996",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "IMG_8927.MOV",
+            "type": "video",
+            "file_hash": "8c48e8808004c5f12e566daffa5305393e576eebac436b1c8f3d51613e4c2d88",
+            "score": 10,
+            "details": "Analyzed 51 frames.",
+            "report_path": "report_20d0ae9a.pdf"
+        }
+    },
+    {
+        "case_id": "5ad68345",
+        "filename": "604893-1.jpg",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\604893-1.jpg",
+        "sha256_hash": "6b51f781650d9926bde718fe67b2a3ca08b145824652760d0d08e6109aa9c6f3",
+        "timestamp": "2025-12-06T12:44:35.678350",
+        "status": "ingested"
+    },
+    {
+        "case_id": "5ad68345",
+        "sha256_hash": "6b51f781650d9926bde718fe67b2a3ca08b145824652760d0d08e6109aa9c6f3",
+        "timestamp": "2025-12-06T12:44:35.787268",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "604893-1.jpg",
+            "type": "video",
+            "file_hash": "6b51f781650d9926bde718fe67b2a3ca08b145824652760d0d08e6109aa9c6f3",
+            "score": 0,
+            "details": "Video processed but no frames analyzed.",
+            "report_path": "report_5ad68345.pdf"
+        }
+    },
+    {
+        "case_id": "bb0c43fb",
+        "filename": "generative_ai_leader_study_guide_english.pdf",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\generative_ai_leader_study_guide_english.pdf",
+        "sha256_hash": "d57c87103f5863af7d57d5aa67e85d35212b7439be8de04d9d97d54cdf8afb05",
+        "timestamp": "2025-12-06T16:48:08.551195",
+        "status": "ingested"
+    },
+    {
+        "case_id": "bb0c43fb",
+        "sha256_hash": "d57c87103f5863af7d57d5aa67e85d35212b7439be8de04d9d97d54cdf8afb05",
+        "timestamp": "2025-12-06T16:48:09.911743",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "generative_ai_leader_study_guide_english.pdf",
+            "type": "video",
+            "file_hash": "d57c87103f5863af7d57d5aa67e85d35212b7439be8de04d9d97d54cdf8afb05",
+            "score": 0,
+            "details": "Could not open video file.",
+            "report_path": "report_bb0c43fb.pdf"
+        }
+    },
+    {
+        "case_id": "fbf29f31",
+        "filename": "lol.png",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\lol.png",
+        "sha256_hash": "945653467eb8f06e114c439355693d884f926a22981421d019beea90d8fca4d2",
+        "timestamp": "2025-12-20T07:36:18.376698",
+        "status": "ingested"
+    },
+    {
+        "case_id": "fbf29f31",
+        "sha256_hash": "945653467eb8f06e114c439355693d884f926a22981421d019beea90d8fca4d2",
+        "timestamp": "2025-12-20T07:36:18.763078",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "lol.png",
+            "type": "image",
+            "file_hash": "945653467eb8f06e114c439355693d884f926a22981421d019beea90d8fca4d2",
+            "score": 30,
+            "details": "ELA levels normal (50). Abnormal frequency spectrum detected (potential GAN artifacts).",
+            "report_path": "report_fbf29f31.pdf"
+        }
+    }
+]

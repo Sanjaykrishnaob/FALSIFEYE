@@ -1,0 +1,42 @@
+[
+    {
+        "tags": ["score", "rating", "result", "verdict", "authentic", "fake"],
+        "response": "The forensic analysis yielded a score of **{score}/100**. A score below 50 indicates the media is likely **Authentic**, while a score above 50 suggests **Potential Manipulation**. This score is a composite of ELA (splicing), FFT (frequency artifacts), and biometric consistency checks."
+    },
+    {
+        "tags": ["ela", "error level analysis", "compression", "splicing", "paste"],
+        "response": "Error Level Analysis (ELA) detects manipulation by analyzing compression artifacts. In a genuine JPEG, the entire image should be at roughly the same error level. If a face or object was pasted in from a different source, it will show a distinctively brighter or different error level in the ELA visualization. In this case, we detected a max difference of **{ela_diff}**."
+    },
+    {
+        "tags": ["fft", "frequency", "spectrum", "gan", "artifact", "noise"],
+        "response": "Fast Fourier Transform (FFT) analysis converts the image into the frequency domain. Deepfake generators (GANs) often leave specific 'checkerboard' artifacts in the high-frequency spectrum that are invisible to the naked eye but obvious in the frequency domain. Our system detected an average frequency energy of **{fft_score}**."
+    },
+    {
+        "tags": ["chain of custody", "legal", "court", "admissible", "hash", "sha256"],
+        "response": "Chain of Custody refers to the chronological documentation or paper trail that records the sequence of custody, control, transfer, analysis, and disposition of physical or electronic evidence. FALSIFEYE secures this by generating a **SHA-256 Hash ({file_hash})** immediately upon ingestion, ensuring the file cannot be altered without detection."
+    },
+    {
+        "tags": ["daubert", "standard", "frye", "admissibility"],
+        "response": "The Daubert Standard is a rule of evidence regarding the admissibility of expert witness testimony. It requires that the technique be testable, peer-reviewed, have a known error rate, and be generally accepted. FALSIFEYE provides the technical metrics (ELA, FFT, MFCC) required to support an expert's testimony under these standards."
+    },
+    {
+        "tags": ["mfcc", "audio", "voice", "clone", "tts", "synthetic"],
+        "response": "Mel-frequency Cepstral Coefficients (MFCCs) represent the short-term power spectrum of a sound. Human voices have natural variances in timbre and pitch. AI Voice Clones (TTS) often exhibit statistically 'perfect' or 'flat' MFCC variances. We detected a variance of **{mfcc_var}**, which contributes to the authenticity score."
+    },
+    {
+        "tags": ["blur", "laplacian", "sharpness", "resolution"],
+        "response": "We use the Laplacian Variance method to detect blur. Deepfakes often blur the boundary between the pasted face and the target head to hide seams. A low variance score indicates the video is blurry, which might be an intentional attempt to mask these artifacts."
+    },
+    {
+        "tags": ["blink", "eyes", "ear", "aspect ratio", "staring"],
+        "response": "We analyze the Eye Aspect Ratio (EAR) over time. Humans blink spontaneously and with a specific speed pattern. Early Deepfakes often didn't blink at all, or blinked too slowly. Our analysis checks for this natural physiological variance."
+    },
+    {
+        "tags": ["hi", "hello", "hey", "help", "who are you"],
+        "response": "Greetings. I am the FALSIFEYE Forensic AI. I am designed to assist legal professionals in interpreting digital evidence analysis. I can explain technical findings like ELA and FFT, or discuss the legal admissibility of this specific evidence."
+    },
+    {
+        "tags": ["how", "work", "methodology", "algorithm"],
+        "response": "I utilize a multi-modal approach: 1. **Visual Forensics**: ELA for splicing, FFT for GAN artifacts, and Biometric analysis (Blinking/Face Mesh). 2. **Audio Forensics**: MFCC and Spectral analysis for voice cloning. 3. **Integrity**: SHA-256 hashing for Chain of Custody."
+    }
+]

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result | FALSIFEYE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            900: '#164e63',
+                        },
+                        slate: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        body {
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Dark Mode Styles */
+        html.dark body {
+            background-color: #0f172a;
+            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: #e2e8f0;
+        }
+        
+        html.dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Light Mode Styles */
+        html:not(.dark) body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        html:not(.dark) .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <script>
+        // Check for saved theme preference, otherwise use system preference
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body class="font-sans antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur fixed w-full z-50 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center text-slate-900 font-bold text-xl">F</div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">FALSIFEYE</span>
+                </div>
+                <a href="/" class="text-sm font-medium text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 flex items-center gap-2">
+                    <i class="fas fa-plus"></i> New Analysis
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto h-[calc(100vh-6rem)]">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+            
+            <!-- Left Column: Report -->
+            <div class="lg:col-span-2 flex flex-col gap-6 h-full overflow-y-auto scrollbar-hide pr-2">
+                
+                <!-- Score Card -->
+                <div class="glass-panel rounded-2xl p-8 flex items-center justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                    
+                    <div>
+                        <h2 class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider mb-1">Authenticity Score</h2>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-6xl font-bold text-slate-900 dark:text-white">{{ result.score }}</span>
+                            <span class="text-xl text-slate-500">/100</span>
+                        </div>
+                        <div class="mt-2">
+                            {% if result.score < 50 %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-500/30">
+                                    <i class="fas fa-check-circle mr-2"></i> Likely Authentic
+                                </span>
+                            {% else %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/30">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Potential Manipulation
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Circular Progress (Visual Only) -->
+                    <div class="relative w-32 h-32 hidden sm:flex items-center justify-center">
+                        <svg class="w-full h-full transform -rotate-90">
+                            <circle cx="64" cy="64" r="60" stroke="currentColor" stroke-width="8" fill="transparent" class="text-slate-200 dark:text-slate-700" />
+                            <circle cx="64" cy="64" r="60" stroke="currentColor" stroke-width="8" fill="transparent" 
+                                    class="{% if result.score < 50 %}text-green-500{% else %}text-red-500{% endif %}" 
+                                    stroke-dasharray="377" 
+                                    stroke-dashoffset="{{ 377 - (377 * result.score / 100) }}" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Details Card -->
+                <div class="glass-panel rounded-2xl p-8 flex-grow">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-microscope text-cyan-600 dark:text-cyan-400"></i> Forensic Analysis
+                    </h3>
+                    <div class="prose prose-invert max-w-none">
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">{{ result.details }}</p>
+                        
+                        {% if result.transcription %}
+                        <div class="mt-6 p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <h4 class="text-sm font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase">Transcription</h4>
+                            <p class="text-slate-600 dark:text-slate-300 italic">"{{ result.transcription }}"</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                        <a href="/download/{{ result.report_path }}" class="inline-flex items-center px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-medium rounded-xl border border-slate-300 dark:border-slate-600 transition-all gap-2">
+                            <i class="fas fa-file-pdf text-red-500 dark:text-red-400"></i>
+                            Download Official Report
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Chatbot -->
+            <div class="glass-panel rounded-2xl flex flex-col h-[600px] lg:h-full overflow-hidden border border-slate-200 dark:border-slate-700">
+                <div class="p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white">Forensic Assistant</h3>
+                        <p class="text-xs text-cyan-600 dark:text-cyan-400 flex items-center gap-1">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-grow p-4 overflow-y-auto space-y-4 bg-slate-50/50 dark:bg-slate-900/30" id="chat-window">
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex-shrink-0 flex items-center justify-center text-cyan-600 dark:text-cyan-400 text-xs">AI</div>
+                        <div class="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 p-3 rounded-2xl rounded-tl-none text-sm max-w-[85%] shadow-sm border border-slate-200 dark:border-slate-700">
+                            Hello! I've analyzed the evidence. I can explain the <strong>Authenticity Score</strong>, details about <strong>Deepfake Detection</strong>, or specific terms like <strong>ELA</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700">
+                    <div class="relative">
+                        <input type="text" id="user-input" 
+                               class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl pl-4 pr-12 py-3 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 placeholder-slate-400 dark:placeholder-slate-500 text-sm"
+                               placeholder="Ask about the analysis..."
+                               onkeypress="if(event.key === 'Enter') sendMessage()">
+                        <button onclick="sendMessage()" class="absolute right-2 top-2 p-1.5 bg-cyan-500 hover:bg-cyan-400 text-white dark:text-slate-900 rounded-lg transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const caseId = "{{ case_id }}";
+        
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value;
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            const typingId = addTypingIndicator();
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: message, case_id: caseId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                removeMessage(typingId);
+                addMessage(data.response, 'bot');
+            });
+        }
+        
+        function addMessage(text, sender) {
+            const chatWindow = document.getElementById('chat-window');
+            const div = document.createElement('div');
+            div.className = 'flex gap-3 ' + (sender === 'user' ? 'flex-row-reverse' : '');
+            
+            const avatar = sender === 'user' 
+                ? '<div class="w-8 h-8 rounded-full bg-cyan-100 dark:bg-cyan-900 flex-shrink-0 flex items-center justify-center text-cyan-700 dark:text-cyan-400 text-xs">You</div>'
+                : '<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex-shrink-0 flex items-center justify-center text-cyan-600 dark:text-cyan-400 text-xs">AI</div>';
+                
+            const bubbleClass = sender === 'user'
+                ? 'bg-cyan-600 text-white rounded-2xl rounded-tr-none'
+                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-2xl rounded-tl-none border border-slate-200 dark:border-slate-700';
+
+            div.innerHTML = `
+                ${avatar}
+                <div class="${bubbleClass} p-3 text-sm max-w-[85%] shadow-sm">
+                    ${text}
+                </div>
+            `;
+            
+            chatWindow.appendChild(div);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            return div.id = 'msg-' + Date.now();
+        }
+
+        function addTypingIndicator() {
+            const chatWindow = document.getElementById('chat-window');
+            const div = document.createElement('div');
+            div.id = 'typing-' + Date.now();
+            div.className = 'flex gap-3';
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex-shrink-0 flex items-center justify-center text-cyan-600 dark:text-cyan-400 text-xs">AI</div>
+                <div class="bg-white dark:bg-slate-800 text-slate-400 p-3 rounded-2xl rounded-tl-none border border-slate-200 dark:border-slate-700 flex gap-1 items-center h-10">
+                    <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+                    <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></span>
+                    <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                </div>
+            `;
+            chatWindow.appendChild(div);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            return div.id;
+        }
+
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+    </script>
+</body>
+</html>

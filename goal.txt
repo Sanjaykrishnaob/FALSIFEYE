@@ -1,0 +1,185 @@
+Slide 2 – INTRODUCTION
+
+Courts are increasingly receiving digital evidence (videos, audios, documents).
+Many of these can be manipulated using AI: Deepfakes, fake voice, edited documents.
+With the rise of AI-generated fake media, courts and legal professionals are facing increasing challenges in verifying the authenticity of digital evidences.
+FALSIFEYE is an AI-powered platform that helps validate video, audio, image, and document-based evidence used in legal proceedings.
+
+Slide 3 – OBJECTIVE
+
+To detect manipulated digital evidence such as deepfake videos, cloned voices, tampered images, and forged documents.
+
+To use AI/NLP models to analyze witness statements, identify contradictions, and verify authenticity.
+
+To transcribe and translate multilingual audio evidence (Tamil, Hindi, etc.) using Whisper and NLP pipelines.
+
+To generate real-time forensic PDF reports with confidence scores and visual proof for legal documentation.
+
+To explain technical results clearly to judges/lawyers using an interactive forensic chatbot.
+
+To integrate all modules into a single web-based dashboard for use in legal, judicial, and police environments.
+
+Slide 4 – LITERATURE SURVEY
+
+(Heading only; no bullet content in slide)
+
+Slide 5 – SUMMARY OF LITERATURE
+
+Most existing research only focuses on one type of threat at a time like detecting deepfake, voice clones, or network attacks.
+But none of them give a complete solution that can check all types of digital evidence together.
+Techniques like Random Forest and Ensemble Models work great for structured data (like numbers or network patterns) and can spot anomalies easily.
+But they don’t work well with unstructured media like audio, video, or images which is exactly what fake legal evidence is made of.
+Methods like CNNs for video and Transformers for audio help in multimedia tampering detection, but still need improvement to be accurate, fast, and easy to explain to non-technical people.
+FALSIFEYE addresses these gaps by combining AI-based verification, NLP analysis, real-time alerts, multilingual support, and legal-ready PDF generation.
+
+Slide 6 – ARCHITECTURE OF PROPOSED SYSTEM
+
+(Architecture diagram slide – no textual content other than title)
+
+Slide 7 – PROPOSED SYSTEM
+
+Modules:
+
+Deepfake & Media Detector – Analyzes video, audio, image, and document files using OpenCV, ELA, Whisper, and metadata techniques to detect forgeries or manipulation.
+
+NLP Statement Verifier – Uses AI/NLP to verify witness statements, spot contradictions, detect emotions, and cross-check with GPT or Claude.
+
+Multilingual Transcriber – Converts speech to text and translates it into English for standard legal record generation using Whisper + Hugging Face pipelines.
+
+Forensic Report Generator – Creates summarized forensic PDF reports including scores, visuals, and explanations.
+
+Explainable Forensic Chatbot – Provides legal professionals an easy way to query and understand technical results using LLMs and prompt templates.
+
+Web Dashboard – Integrates all modules, offering upload, analysis, and report generation.
+
+
+
+
+DESCRIPTION:
+[0001] FALSIFEYE is a project that presents an AI-based platform to assist courts, lawyers, and 
+investigators in evaluating the genuineness of digital evidence. With the growing use of deepfakes, 
+voice cloning, doctored images, and forged documents, court systems lose faith in their visual and sound 
+observations. FALSIFEYE deals with this issue by integrating different AI techniques into an accessible 
+web platform. It enables users to upload various forms of evidence such as video, audio, image, or 
+documents, and the system screens them for tampering marks itself without requiring multiple tools. It 
+applies deepfake detection, voice cloning testing, metadata verification, and document forgery. It is also 
+feasible to conduct an analysis of witness statements with NLP to search for anomalous behaviour. For 
+lower courts, FALSIFEYE utilizes Whisper to transcribe audio recordings in Tamil, Hindi, or any 
+language into text to be reviewable with ease. Upon culmination of analysis, a PDF-based court-ready 
+report is generated with scores of authenticity, visual evidence, and a summary report. Of value is an 
+interactive chatbot translating technical results into plain language. It is helpful to judges who are not 
+technically competent, lawyers, as well as policemen who would want to understand why their piece of 
+evidence has been highlighted. FALSIFEYE is fast, scalable, and is intended for real-time usage. For 
+this reason, it is perfect for live court hearings.
+PRIOR ART AND BACKGROUND:
+[0002] “Deepfake Video Detection Using Ensemble CNNs” (2024) detects video forgery effectively 
+but does not include audio, image, or document verification. This makes it incomplete for full case 
+analysis. 
+[0003] “Automated Document Forgery Detection Using ELA” (2023) reliably detects document 
+tampering but works as a stand-alone tool. It requires separate workflows for video or audio evidence. 
+[0004] “Voice Clone Detection Using Spectrogram Analysis” (2024) identifies synthetic voices 
+effectively but does not offer multilingual transcription or court-ready reporting. 
+[0005] “AI-Powered Legal Chatbots” (2025) improve access to legal resources but are not linked to 
+forensic systems and cannot verify digital evidence. 
+[0006] Current systems are fragmented, consume a lot of resources, and are often difficult for non￾technical users to understand. There is a strong need for a complete, easy-to-understand, and legally 
+compatible platform to support digital justice systems.
+OBJECTIVE:
+[0007] It is a complete AI-based solution to authenticate digital evidence from various types. It includes 
+deepfake detection, voice clone detection, document forgery detection, checking for metadata, and 
+NLP-based statement verification within one platform. The system offers multilingual transcription to 
+improve accessibility, automatically generates legally formatted forensic reports, and has a chatbot 
+interface that explains findings. This makes technical results easy to understand for judges, lawyers, 
+and investigators.
+SUMMARY:
+[0008] Digital evidence is a central component in modern legal systems and criminal justice system, 
+but the new AI fakes on trial raised issues for courts struggling to confirm its credibility.
+[0009] Moreover, existing forensic tools may be slow, compartmentalized and need technical 
+knowledge for operation causing delays and inefficiencies.
+[0010] To address these issues, this invention performs FALSIFEYE an open-source platform for video, 
+audio and image ds use investigation and analysis of documents and witness testimonies from a single 
+place.
+[0011] Such a system detects deepfakes, voice clones and fakes through the use of AI models. It then 
+refines witness testimonies through natural language processing to detect incoherence and 
+contradictions.
+[0012] It is also available with a multilingual transcription facility for dealing with evidence in local 
+languages, thereby allowing the rural and other local courts to take advantage of the same. 
+[0013] An automatic intermediate forensic report is generated with confidence values, visual indicators 
+and clear ranking. Moreover, an interpretable chatbot also makes results more accessible to lay users.
+[0014] The framework also emphasizes accessibility, speed and legal liability for transparency and trust 
+in the digital evidence checking process.
+DETAILED TECHNICAL DESCRIPTION:
+[0015] Evidence Pre-Processing: The uploaded files are obtained and cleaned. Videos are
+divided into frames, documents’ data is subjected to OCR and audio is converted to 
+spectrograms for processing.
+[0016] Media Verification Layer: Deep learning models such as CNN, ELA, and spectrogram 
+analysis can detect tampering in video, audio images and documents.
+[0017] NLP Statement Verifier: Based verbal NLP models, it is used to find contradiction 
+among sentences, analyse the sentiment and cross-verify the witness statement for truthfulness 
+and coherence.
+[0018] The Multilingual Transcription Layer Whisper transcribes regional audio to text for 
+advanced NLP processing, supporting languages such as Tamil, Hindi etc.
+[0019] Report Generation Module: This module generates structured, legally formatted PDF 
+forensic reports containing authenticity score and visual evidence along with metadata 
+findings. 
+[0020] Explainable Chatbot Interface: It leverages GPT and Claude APIs to transform technical 
+outputs into understandable explanations.
+[0021] Web Dashboard: This is a centralized interface for uploading evidence, visualization of 
+status, downloading reports and interaction with the chatbot.
+LIST OF FIGURE NUMERALS:
+100 – Main System Architecture
+101 – Media Verification Layer (Video/Audio/Image/Document Analysis)
+102 – NLP Witness Statement Verifier
+103 – Multilingual Transcription Module
+104 – Forensic PDF Report Generator
+105 – Explainable Chatbot Interface
+106 – Web Dashboard
+BRIEF DESCRIPTION OF THE DRAWING:
+[0022] Media Verification Layer (101): Scans evidence files uploaded on whether tampering 
+has occurred via deepfake detection, voice clone analysis and image/document forgery check.
+[0023] NLP Witness Statement Verifier (102): Retrieves contradictions/inconsistencies, 
+which may be emotional cues in the testimonies.
+[0024] Multi-language Transcription (103): It turns dirty, regional audio into clean text that 
+analysis can be performed on it using Whisper.
+[0025] Report Generator (104): Automatically generates forensically sound reports with 
+confidence scores and visual evidence.
+[0026] Chatbot Interface (105): Communicates analysis results to judges and lawyers in 
+natural language so that everybody can understand.
+[0027] Web Dashboard (106): Used as a centralized system to monitor uploads, look at 
+analysis outputs, download reports, and chat with the chatbot.
+[0028] Overall Workflow: Evidence uploaded → pre-processed → analysed by AI models → 
+aggregated into final authenticity score → report created → chatbot interprets findings.
+CLAIM: 
+I/WE Claim,
+1. A centralised platform (100) that integrates witness statements, documents, audio, video, 
+and image digital evidence verification into a single dashboard (106).
+• A specialised model pipeline analyses each type of evidence, generating visual proof and 
+authenticity scores.
+• By locally processing evidence prior to report generation, privacy is preserved.
+2. The system described in claim 1, in which a Media Verification Layer (101) uses AI-based 
+techniques to identify forged documents, tampered images, voice clones, and deepfakes.
+• CNN and Spectrogram models evaluate the authenticity of audio and video.
+• Image/document integrity is confirmed by ELA and metadata inspection.
+3. The system described in claim 1, which analyses testimony to find emotional cues and 
+contradictions using an NLP Statement Verifier (102).
+4. The system described in claim 1, in which audio in regional languages is converted to text 
+for additional analysis by a Multilingual Transcription Layer (103).
+5. A Forensic Report Generator (104) generates court-ready PDF reports with authenticity 
+scores and accompanying images as part of the system described in claim 1.
+6. The system described in claim 1, in which an Explainable Chatbot (105) helps investigators, 
+attorneys, and judges by providing natural language explanations of detection results.
+SIGNATURE OF THE APPLICANT
+Dated this 20th September of 2025
+FALSIFEYE – Legal Testimony & Evidence Verifier
+ABSTRACT OF THE INVENTION
+A centralized, AI-based system for verification of digital evidence presented in court and police 
+investigations is provided by the present invention. The web-based system includes deepfake 
+detection, voice clone examination, document forgery analysis, and NLP-based testimony 
+verification. Apart from creating forensic reports in a legally acceptable format and enabling 
+multilingual transcription, the system also includes an explainable chatbot to enable the 
+translation of results. Due to this innovation, which is transparent, reliable, and accessible, 
+judges and solicitors can now make decisions based on digital evidence. Its real-time capable, 
+modular design makes it appropriate for mass deployment in legal and law enforcement 
+processes.
+SIGNATURE OF THE APPLICANT
+Dated this 20th September of 2025
+FALSIFEYE – Legal Testimony & Evidence Verifier
