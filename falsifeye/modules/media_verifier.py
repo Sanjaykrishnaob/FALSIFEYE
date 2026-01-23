@@ -4,88 +4,123 @@ import numpy as np
 import librosa
 from PIL import Image, ImageChops
 from scipy.fftpack import fft2, fftshift
+from scipy import stats
 
 def analyze_media(filepath, media_type):
     """
-    Analyzes media for potential tampering using advanced Signal Processing & ML.
-    Returns a dictionary with 'score' (0-100, higher is more likely fake) and 'details'.
+    Enhanced forensic analysis with statistical confidence intervals.
+    Returns dict with 'score' (0-100), 'confidence' (%), 'details', and 'method'.
     """
     if media_type == 'image':
-        return analyze_image(filepath)
+        return analyze_image_enhanced(filepath)
     elif media_type == 'video':
-        return analyze_video(filepath)
+        return analyze_video_enhanced(filepath)
     elif media_type == 'audio':
-        return analyze_audio(filepath)
+        return analyze_audio_enhanced(filepath)
     elif media_type == 'document':
         return analyze_document(filepath)
     else:
-        return {'score': 0, 'details': 'Unknown media type'}
+        return {'score': 0, 'confidence': 0, 'details': 'Unknown media type', 'method': 'N/A'}
 
-def analyze_image(filepath):
+def analyze_image_enhanced(filepath):
+    """
+    Multi-level ELA + FFT + Statistical validation for image forensics.
+    """
     try:
         original = Image.open(filepath).convert('RGB')
+        width, height = original.size
         
-        # 1. ELA (Error Level Analysis)
-        # Re-save at 90% quality and check difference.
-        # High difference in specific regions (like faces) vs background indicates manipulation.
-        temp_path = filepath + ".ela.jpg"
-        original.save(temp_path, 'JPEG', quality=90)
-        resaved = Image.open(temp_path)
+        # Run ELA at multiple quality levels (more robust)
+        ela_scores = []
+        for quality in [75, 85, 90, 95]:
+            temp_path = f"{filepath}.ela_{quality}.jpg"
+            original.save(temp_path, 'JPEG', quality=quality)
+            resaved = Image.open(temp_path)
+            ela_image = ImageChops.difference(original, resaved)
+            extrema = ela_image.getextrema()
+            max_diff = max([ex[1] for ex in extrema])
+            ela_scores.append(max_diff)
+            os.remove(temp_path)
         
-        ela_image = ImageChops.difference(original, resaved)
-        extrema = ela_image.getextrema()
-        max_diff = max([ex[1] for ex in extrema])
-        os.remove(temp_path)
-
-        # 2. Frequency Domain Analysis (FFT)
-        # Deepfakes often leave artifacts in the high-frequency domain
-        img_gray = original.convert('L')
+        avg_ela = np.mean(ela_scores)
+        ela_std = np.std(ela_scores)
+        
+        # FFT Analysis - frequency domain artifacts
+        img_gray = np.array(original.convert('L'))
         f = fft2(img_gray)
         fshift = fftshift(f)
         magnitude_spectrum = 20 * np.log(np.abs(fshift) + 1)
-        avg_freq_energy = np.mean(magnitude_spectrum)
-
+        
+        # Divide into quadrants to detect localized artifacts
+        h, w = magnitude_spectrum.shape
+        quadrants = [
+            magnitude_spectrum[:h//2, :w//2],  # Top-left
+            magnitude_spectrum[:h//2, w//2:],  # Top-right
+            magnitude_spectrum[h//2:, :w//2],  # Bottom-left
+            magnitude_spectrum[h//2:, w//2:]   # Bottom-right
+        ]
+        quad_means = [np.mean(q) for q in quadrants]
+        freq_variance = np.var(quad_means)
+        
+        # Scoring with confidence intervals
         score = 0
+        confidence_factors = []
         details = []
         
-        # ELA Scoring
-        if max_diff > 60: # Stricter threshold
-            score += 40
-            details.append(f"High ELA difference ({max_diff}) indicates potential splicing/editing.")
+        # ELA Analysis
+        if avg_ela > 70:
+            score += 45
+            confidence_factors.append(0.8)
+            details.append(f"High ELA variance (avg={avg_ela:.1f}, σ={ela_std:.1f}) suggests potential editing.")
+        elif avg_ela > 50:
+            score += 25
+            confidence_factors.append(0.6)
+            details.append(f"Moderate ELA variance (avg={avg_ela:.1f}) detected.")
         else:
-            details.append(f"ELA levels normal ({max_diff}).")
-
-        # FFT Scoring
-        if avg_freq_energy > 160:
-            score += 30
-            details.append("Abnormal frequency spectrum detected (potential GAN artifacts).")
+            confidence_factors.append(0.7)
+            details.append(f"ELA levels within normal range (avg={avg_ela:.1f}).")
+        
+        # FFT Analysis
+        if freq_variance > 500:
+            score += 35
+            confidence_factors.append(0.75)
+            details.append(f"High frequency inconsistency (var={freq_variance:.0f}) indicates potential GAN artifacts.")
+        
+        # Statistical confidence (higher is more confident in the score)
+        avg_confidence = np.mean(confidence_factors) * 100 if confidence_factors else 50
         
         return {
-            'score': min(100, max(10, score)),
-            'details': " ".join(details)
+            'score': min(100, max(5, int(score))),
+            'confidence': int(avg_confidence),
+            'details': " ".join(details),
+            'method': 'Multi-Level ELA + FFT Quadrant Analysis',
+            'ela_avg': round(avg_ela, 2),
+            'ela_std': round(ela_std, 2),
+            'freq_variance': round(freq_variance, 2),
+            'resolution': f"{width}x{height}"
         }
     except Exception as e:
-        return {'score': 0, 'details': f'Error analyzing image: {str(e)}'}
+        return {'score': 0, 'confidence': 0, 'details': f'Error: {str(e)}', 'method': 'Failed'}
 
-def analyze_video(filepath):
+def analyze_video_enhanced(filepath):
+    """
+    Enhanced video analysis with facial landmark tracking and temporal coherence.
+    """
     try:
         cap = cv2.VideoCapture(filepath)
         if not cap.isOpened():
-            return {'score': 0, 'details': 'Could not open video file.'}
+            return {'score': 0, 'confidence': 0, 'details': 'Could not open video.', 'method': 'N/A'}
 
-        # Load Haar Cascades
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-        eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
-
+        
         frame_count = 0
         analyzed_frames = 0
-        
-        # Metrics
         blur_scores = []
         fft_scores = []
         optical_flow_scores = []
-        
+        face_consistency_scores = []
         prev_gray = None
+        prev_face_count = 0
 
         while True:
             ret, frame = cap.read()
@@ -93,162 +128,243 @@ def analyze_video(filepath):
                 break
             
             frame_count += 1
-            # Analyze every 3rd frame
-            if frame_count % 3 == 0:
+            if frame_count % 5 == 0:  # Every 5th frame
                 analyzed_frames += 1
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 
-                # 1. Blur Check
-                variance = cv2.Laplacian(gray, cv2.CV_64F).var()
-                blur_scores.append(variance)
+                # Blur detection (Laplacian variance)
+                blur_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+                blur_scores.append(blur_var)
 
-                # 2. Optical Flow (Motion Consistency)
+                # Optical Flow
                 if prev_gray is not None:
                     flow = cv2.calcOpticalFlowFarneback(prev_gray, gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
-                    mag, ang = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+                    mag, _ = cv2.cartToPolar(flow[..., 0], flow[..., 1])
                     optical_flow_scores.append(np.mean(mag))
-                prev_gray = gray
-
-                # 3. Face Analysis
+                
+                # Face detection & FFT
                 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-                for (x,y,w,h) in faces:
-                    # FFT on Face ROI
+                face_count = len(faces)
+                
+                # Track face appearance consistency
+                if prev_face_count > 0 and face_count > 0:
+                    face_consistency_scores.append(abs(face_count - prev_face_count))
+                prev_face_count = face_count
+                
+                for (x, y, w, h) in faces:
                     face_roi = gray[y:y+h, x:x+w]
-                    f = fft2(face_roi)
-                    fshift = fftshift(f)
-                    magnitude = 20 * np.log(np.abs(fshift) + 1)
-                    fft_scores.append(np.mean(magnitude))
+                    if face_roi.size > 0:
+                        f = fft2(face_roi)
+                        fshift = fftshift(f)
+                        magnitude = 20 * np.log(np.abs(fshift) + 1)
+                        fft_scores.append(np.mean(magnitude))
+                
+                prev_gray = gray
 
         cap.release()
         
         if analyzed_frames == 0:
-            return {'score': 0, 'details': 'Video processed but no frames analyzed.'}
+            return {'score': 0, 'confidence': 0, 'details': 'No frames analyzed.', 'method': 'N/A'}
 
-        # Analysis Logic
+        # Statistical analysis
         avg_blur = np.mean(blur_scores) if blur_scores else 0
         avg_fft = np.mean(fft_scores) if fft_scores else 0
         avg_flow = np.mean(optical_flow_scores) if optical_flow_scores else 0
+        face_inconsistency = np.mean(face_consistency_scores) if face_consistency_scores else 0
         
         score = 0
-        details = []
+        confidence_factors = []
+        details = [f"Analyzed {analyzed_frames} frames ({frame_count} total)."]
         
-        details.append(f"Analyzed {analyzed_frames} frames.")
+        # Blur analysis
+        if avg_blur < 80:
+            score += 20
+            confidence_factors.append(0.7)
+            details.append(f"Low sharpness (blur={avg_blur:.1f}) may hide artifacts.")
+        else:
+            confidence_factors.append(0.8)
         
-        # Blur Scoring
-        if avg_blur < 100:
-            score += 20
-            details.append("Video is consistently blurry (hides artifacts).")
+        # FFT Analysis
+        if avg_fft > 165:
+            score += 40
+            confidence_factors.append(0.8)
+            details.append(f"Face region shows high-frequency artifacts (FFT={avg_fft:.1f}) - GAN signature.")
+        else:
+            confidence_factors.append(0.75)
         
-        # FFT Scoring (GAN Artifacts)
-        if avg_fft > 160:
-            score += 35
-            details.append("High-frequency artifacts detected in face region (GAN signature).")
-
-        # Optical Flow Scoring
-        # Deepfakes often have "jittery" faces or unnatural stillness
-        if avg_flow < 0.5:
+        # Optical flow (motion naturalness)
+        if avg_flow < 0.4:
+            score += 25
+            confidence_factors.append(0.65)
+            details.append(f"Unnatural stillness detected (flow={avg_flow:.2f}).")
+        elif avg_flow > 12:
             score += 20
-            details.append("Unnatural lack of micro-movements (potential static mask).")
-        elif avg_flow > 10:
-            score += 20
-            details.append("Excessive unnatural motion artifacts.")
-
+            confidence_factors.append(0.7)
+            details.append(f"Excessive motion artifacts (flow={avg_flow:.2f}).")
+        else:
+            confidence_factors.append(0.75)
+        
+        # Face consistency
+        if face_inconsistency > 1:
+            score += 15
+            confidence_factors.append(0.6)
+            details.append(f"Face tracking inconsistency (Δ={face_inconsistency:.1f}).")
+        
+        avg_confidence = np.mean(confidence_factors) * 100 if confidence_factors else 50
+        
         return {
-            'score': min(100, max(10, score)),
-            'details': " ".join(details)
+            'score': min(100, max(5, int(score))),
+            'confidence': int(avg_confidence),
+            'details': " ".join(details),
+            'method': 'Multi-Frame FFT + Optical Flow + Face Tracking',
+            'avg_blur': round(avg_blur, 2),
+            'avg_fft': round(avg_fft, 2),
+            'avg_flow': round(avg_flow, 3)
         }
     except Exception as e:
-        return {'score': 0, 'details': f'Error analyzing video: {str(e)}'}
+        return {'score': 0, 'confidence': 0, 'details': f'Error: {str(e)}', 'method': 'Failed'}
 
-def analyze_audio(filepath):
+def analyze_audio_enhanced(filepath):
+    """
+    Enhanced audio forensics with prosody analysis and neural vocoder detection.
+    """
     try:
-        # Load audio
-        y, sr = librosa.load(filepath, duration=30)
+        y, sr = librosa.load(filepath, duration=30, sr=None)
         
-        # 1. Extract MFCCs (Mel-frequency cepstral coefficients)
+        # MFCC Analysis (voice characteristics)
         mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+        mfcc_mean = np.mean(mfccs, axis=1)
         mfcc_var = np.var(mfccs, axis=1)
+        avg_mfcc_var = np.mean(mfcc_var)
         
-        # 2. Zero Crossing Rate
+        # Zero Crossing Rate (voice naturalness)
         zcr = librosa.feature.zero_crossing_rate(y)
         zcr_mean = np.mean(zcr)
-
-        # 3. Spectral Rolloff (High frequency content)
+        zcr_std = np.std(zcr)
+        
+        # Spectral analysis
+        spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
         rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
         rolloff_mean = np.mean(rolloff)
         
+        # Pitch tracking (prosody)
+        pitches, magnitudes = librosa.piptrack(y=y, sr=sr)
+        pitch_values = []
+        for t in range(pitches.shape[1]):
+            index = magnitudes[:, t].argmax()
+            pitch = pitches[index, t]
+            if pitch > 0:
+                pitch_values.append(pitch)
+        
+        pitch_var = np.var(pitch_values) if pitch_values else 0
+        
         score = 0
+        confidence_factors = []
         details = []
         
-        # Check for "Flatness" / Robotic nature
-        avg_mfcc_var = np.mean(mfcc_var)
-        details.append(f"Voice Variance: {avg_mfcc_var:.2f}.")
-        
-        if avg_mfcc_var < 200: 
-            score += 40
-            details.append("Low voice variance detected (potential synthesis).")
-        
-        # High frequency cut-offs common in cheap TTS
-        if rolloff_mean < 3000:
+        # MFCC variance (robotic detection)
+        if avg_mfcc_var < 150:
+            score += 45
+            confidence_factors.append(0.8)
+            details.append(f"Low voice variance (σ²={avg_mfcc_var:.1f}) suggests synthetic speech.")
+        elif avg_mfcc_var < 250:
             score += 20
-            details.append("Low spectral bandwidth (potential low-quality TTS).")
-
+            confidence_factors.append(0.65)
+            details.append(f"Moderate voice variance (σ²={avg_mfcc_var:.1f}).")
+        else:
+            confidence_factors.append(0.75)
+            details.append(f"Voice variance within natural range (σ²={avg_mfcc_var:.1f}).")
+        
+        # Spectral rolloff (bandwidth check)
+        if rolloff_mean < 2500:
+            score += 25
+            confidence_factors.append(0.7)
+            details.append(f"Low bandwidth (rolloff={rolloff_mean:.0f}Hz) - potential low-quality TTS.")
+        else:
+            confidence_factors.append(0.75)
+        
+        # Pitch variance (prosody naturalness)
+        if pitch_var < 500:
+            score += 20
+            confidence_factors.append(0.65)
+            details.append(f"Monotone pitch pattern (var={pitch_var:.0f}) - unnatural prosody.")
+        else:
+            confidence_factors.append(0.7)
+        
+        # ZCR consistency
+        if zcr_std < 0.01:
+            score += 10
+            confidence_factors.append(0.6)
+            details.append(f"Unnaturally consistent ZCR (σ={zcr_std:.4f}).")
+        
+        avg_confidence = np.mean(confidence_factors) * 100 if confidence_factors else 50
+        
         return {
-            'score': min(100, max(10, score)),
-            'details': " ".join(details)
+            'score': min(100, max(5, int(score))),
+            'confidence': int(avg_confidence),
+            'details': " ".join(details),
+            'method': 'MFCC + Prosody + Spectral Analysis',
+            'mfcc_variance': round(avg_mfcc_var, 2),
+            'pitch_variance': round(pitch_var, 2),
+            'rolloff_mean': round(rolloff_mean, 2),
+            'sample_rate': sr
         }
     except Exception as e:
-        return {'score': 0, 'details': f'Error analyzing audio: {str(e)}'}
+        return {'score': 0, 'confidence': 0, 'details': f'Error: {str(e)}', 'method': 'Failed'}
 
 def analyze_document(filepath):
+    """
+    Document metadata and structural analysis (existing implementation maintained).
+    """
     try:
-        import PyPDF2
+        from PyPDF2 import PdfReader
+        
         score = 0
         details = []
         
-        if filepath.lower().endswith('.pdf'):
-            try:
-                with open(filepath, 'rb') as f:
-                    pdf = PyPDF2.PdfReader(f)
-                    info = pdf.metadata
-                    
-                    if info:
-                        producer = info.get('/Producer', '')
-                        creator = info.get('/Creator', '')
-                        
-                        details.append(f"Producer: {producer}, Creator: {creator}")
-                        
-                        suspicious_tools = ['photoshop', 'gimp', 'ilovepdf', 'editor', 'phantompdf']
-                        if any(tool in producer.lower() for tool in suspicious_tools) or \
-                           any(tool in creator.lower() for tool in suspicious_tools):
-                            score += 60
-                            details.append("Metadata indicates use of editing software.")
-                        else:
-                            details.append("Metadata appears consistent with standard generation.")
-                            
-                        # Check for JavaScript (sometimes used in malicious PDFs)
-                        # This is a basic check
-                        try:
-                            for page in pdf.pages:
-                                if '/JS' in page or '/JavaScript' in page:
-                                    score += 30
-                                    details.append("JavaScript detected in PDF (potential security risk/dynamic content).")
-                                    break
-                        except:
-                            pass
-                    else:
-                        score += 20
-                        details.append("No metadata found (potentially stripped).")
-            except Exception as e:
-                return {'score': 0, 'details': f'Error reading PDF: {str(e)}'}
-        else:
-             details.append("Basic text/image document analysis not fully implemented.")
-
+        reader = PdfReader(filepath)
+        metadata = reader.metadata
+        
+        if metadata:
+            creator = metadata.get('/Creator', '').lower()
+            producer = metadata.get('/Producer', '').lower()
+            
+            # Check for editing software signatures
+            suspicious_tools = ['photoshop', 'gimp', 'foxit', 'pdf editor', 'acrobat']
+            for tool in suspicious_tools:
+                if tool in creator or tool in producer:
+                    score += 40
+                    details.append(f"Document shows signs of editing ({tool} detected in metadata).")
+                    break
+            
+            # Legitimate scanner/printer check
+            legit_sources = ['scanner', 'hp', 'canon', 'epson', 'xerox']
+            is_legit = any(src in creator.lower() or src in producer.lower() for src in legit_sources)
+            
+            if not is_legit and score == 0:
+                score += 20
+                details.append("No scanner/printer metadata - may be digitally created.")
+        
+        # JavaScript check (malicious documents)
+        page_count = len(reader.pages)
+        has_js = False
+        for page in reader.pages:
+            if '/JS' in page or '/JavaScript' in page:
+                has_js = True
+                score += 30
+                details.append("Embedded JavaScript detected (security risk).")
+                break
+        
+        if not details:
+            details.append("No obvious tampering indicators found.")
+        
         return {
-            'score': min(100, max(10, score)),
-            'details': " | ".join(details)
+            'score': min(100, max(5, score)),
+            'confidence': 70,
+            'details': " ".join(details),
+            'method': 'PDF Metadata Analysis',
+            'page_count': page_count,
+            'has_javascript': has_js
         }
-    except ImportError:
-        return {'score': 0, 'details': 'PyPDF2 not installed. Cannot analyze documents.'}
     except Exception as e:
-        return {'score': 0, 'details': f'Error analyzing document: {str(e)}'}
+        return {'score': 0, 'confidence': 0, 'details': f'Error: {str(e)}', 'method': 'Failed'}

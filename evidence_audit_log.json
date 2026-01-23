@@ -219,5 +219,71 @@
             "details": "Producer: ReportLab PDF Library - (opensource), Creator: (unspecified) | Metadata appears consistent with standard generation.",
             "report_path": "report_82b9bfbb.pdf"
         }
+    },
+    {
+        "case_id": "bf337d86",
+        "filename": "hehe.png",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\hehe.png",
+        "sha256_hash": "9de0f1326f4184a2e7f5df37cbf570ddd0f3c02b7db5b670e1b0d1125d44bc6b",
+        "timestamp": "2026-01-23T10:18:57.347115",
+        "status": "ingested"
+    },
+    {
+        "case_id": "bf337d86",
+        "sha256_hash": "9de0f1326f4184a2e7f5df37cbf570ddd0f3c02b7db5b670e1b0d1125d44bc6b",
+        "timestamp": "2026-01-23T10:18:57.840816",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "hehe.png",
+            "type": "image",
+            "file_hash": "9de0f1326f4184a2e7f5df37cbf570ddd0f3c02b7db5b670e1b0d1125d44bc6b",
+            "score": 70,
+            "details": "High ELA difference (120) indicates potential splicing/editing. Abnormal frequency spectrum detected (potential GAN artifacts).",
+            "report_path": "report_bf337d86.pdf"
+        }
+    },
+    {
+        "case_id": "8da9ff65",
+        "filename": "1_-_8_Lessons.pdf",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\1_-_8_Lessons.pdf",
+        "sha256_hash": "32eb7056fadf6687749aee4836871685fd08d52e7d92cab7f7a5065afb8b073d",
+        "timestamp": "2026-01-23T11:08:05.290870",
+        "status": "ingested"
+    },
+    {
+        "case_id": "8da9ff65",
+        "sha256_hash": "32eb7056fadf6687749aee4836871685fd08d52e7d92cab7f7a5065afb8b073d",
+        "timestamp": "2026-01-23T11:08:06.984943",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "1_-_8_Lessons.pdf",
+            "type": "video",
+            "file_hash": "32eb7056fadf6687749aee4836871685fd08d52e7d92cab7f7a5065afb8b073d",
+            "score": 0,
+            "details": "Could not open video file.",
+            "report_path": "report_8da9ff65.pdf"
+        }
+    },
+    {
+        "case_id": "9f3043d9",
+        "filename": "Mdoule.1_CFT_Oh_-Td_complex.pdf",
+        "file_path": "C:\\Users\\Sanjay\\Desktop\\isha\\falsifeye\\uploads\\Mdoule.1_CFT_Oh_-Td_complex.pdf",
+        "sha256_hash": "71e0541248e92a5371ab45108de5c15fa7900034398264f62c087e5d62ffe85a",
+        "timestamp": "2026-01-23T11:12:35.999397",
+        "status": "ingested"
+    },
+    {
+        "case_id": "9f3043d9",
+        "sha256_hash": "71e0541248e92a5371ab45108de5c15fa7900034398264f62c087e5d62ffe85a",
+        "timestamp": "2026-01-23T11:12:36.647506",
+        "action": "analysis_completed",
+        "results_summary": {
+            "filename": "Mdoule.1_CFT_Oh_-Td_complex.pdf",
+            "type": "video",
+            "file_hash": "71e0541248e92a5371ab45108de5c15fa7900034398264f62c087e5d62ffe85a",
+            "score": 0,
+            "details": "Could not open video file.",
+            "report_path": "report_9f3043d9.pdf"
+        }
     }
 ]
