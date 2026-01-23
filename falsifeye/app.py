@@ -145,6 +145,8 @@ def chat():
 
 if __name__ == '__main__':
     print("Running Flask app...")
-    # Run on 0.0.0.0 to ensure it's accessible from external browsers if needed
-    app.run(debug=False, host='0.0.0.0', port=8081)
+    # Run on 0.0.0.0 to ensure it's accessible from external browsers
+    # Use port 7860 for HF Spaces, 8081 for local/other deployments
+    port = int(os.environ.get('FLASK_PORT', 8081))
+    app.run(debug=False, host='0.0.0.0', port=port)
     print("App finished running.")

@@ -28,16 +28,17 @@ COPY . /app/
 # Create uploads directory
 RUN mkdir -p /app/falsifeye/uploads
 
-# Expose port
-EXPOSE 8081
+# Expose port (HF Spaces requires port 7860)
+EXPOSE 7860
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=falsifeye/app.py
+ENV FLASK_PORT=7860
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8081/')" || exit 1
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:7860/')" || exit 1
 
-# Run Flask app
+# Run Flask app on port 7860
 CMD ["python", "falsifeye/app.py"]
