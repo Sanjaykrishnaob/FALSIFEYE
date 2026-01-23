@@ -1,0 +1,17 @@
+streamlit>=1.28.0
+streamlit-option-menu>=0.3.6
+Pillow>=10.0.0
+reportlab>=4.0.0
+numpy>=1.24.0
+scipy>=1.11.0
+textblob>=0.17.1
+opencv-python>=4.8.0
+librosa>=0.10.0
+PyPDF2>=3.17.0
+openai-whisper>=20230314
+sentence-transformers>=2.2.0
+nltk>=3.8.1
+torch>=2.0.0
+scikit-learn>=1.3.0
+numba>=0.57.0
+werkzeug>=2.3.0
