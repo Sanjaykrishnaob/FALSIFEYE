@@ -69,22 +69,35 @@ def analyze_image_enhanced(filepath):
         
         # ELA Analysis
         if avg_ela > 70:
-            score += 45
-            confidence_factors.append(0.8)
-            details.append(f"High ELA variance (avg={avg_ela:.1f}, σ={ela_std:.1f}) suggests potential editing.")
+            score += 65
+            confidence_factors.append(0.9)
+            details.append(f"CRITICAL: Very high ELA variance (avg={avg_ela:.1f}, σ={ela_std:.1f}) strongly suggests heavy editing or forgery.")
         elif avg_ela > 50:
-            score += 25
-            confidence_factors.append(0.6)
-            details.append(f"Moderate ELA variance (avg={avg_ela:.1f}) detected.")
+            score += 40
+            confidence_factors.append(0.8)
+            details.append(f"MODERATE: Elevated ELA variance (avg={avg_ela:.1f}) indicates possible splicing/cloning.")
+        elif avg_ela > 30:
+            score += 20
+            confidence_factors.append(0.75)
+            details.append(f"MINOR: Slight ELA variance (avg={avg_ela:.1f}) - minor editing detected.")
         else:
+            score += 5
             confidence_factors.append(0.7)
-            details.append(f"ELA levels within normal range (avg={avg_ela:.1f}).")
+            details.append(f"BASELINE: ELA within natural range (avg={avg_ela:.1f}) - appears authentic.")
         
         # FFT Analysis
-        if freq_variance > 500:
+        if freq_variance > 1000:
+            score += 50
+            confidence_factors.append(0.85)
+            details.append(f"CRITICAL: Extreme frequency inconsistency (var={freq_variance:.0f}) indicates GAN or deepfake artifacts.")
+        elif freq_variance > 500:
             score += 35
             confidence_factors.append(0.75)
-            details.append(f"High frequency inconsistency (var={freq_variance:.0f}) indicates potential GAN artifacts.")
+            details.append(f"HIGH: Significant frequency anomalies (var={freq_variance:.0f}) detected - potential neural network generation.")
+        elif freq_variance > 200:
+            score += 15
+            confidence_factors.append(0.65)
+            details.append(f"MODERATE: Some frequency variance (var={freq_variance:.0f}) noted.")
         
         # Statistical confidence (higher is more confident in the score)
         avg_confidence = np.mean(confidence_factors) * 100 if confidence_factors else 50
@@ -177,38 +190,68 @@ def analyze_video_enhanced(filepath):
         details = [f"Analyzed {analyzed_frames} frames ({frame_count} total)."]
         
         # Blur analysis
-        if avg_blur < 80:
-            score += 20
-            confidence_factors.append(0.7)
-            details.append(f"Low sharpness (blur={avg_blur:.1f}) may hide artifacts.")
+        if avg_blur < 50:
+            score += 40
+            confidence_factors.append(0.85)
+            details.append(f"CRITICAL: Severely blurred frames (blur={avg_blur:.1f}) - major forgery indicator.")
+        elif avg_blur < 80:
+            score += 25
+            confidence_factors.append(0.75)
+            details.append(f"MODERATE: Low sharpness (blur={avg_blur:.1f}) may conceal artifacts or frame interpolation.")
         else:
+            score += 5
             confidence_factors.append(0.8)
+            details.append(f"Good frame clarity (blur={avg_blur:.1f}).")
         
         # FFT Analysis
-        if avg_fft > 165:
+        if avg_fft > 180:
+            score += 55
+            confidence_factors.append(0.9)
+            details.append(f"CRITICAL: Face region shows strong high-frequency artifacts (FFT={avg_fft:.1f}) - definitive GAN/deepfake signature.")
+        elif avg_fft > 165:
             score += 40
             confidence_factors.append(0.8)
-            details.append(f"Face region shows high-frequency artifacts (FFT={avg_fft:.1f}) - GAN signature.")
+            details.append(f"HIGH: Face shows high-frequency anomalies (FFT={avg_fft:.1f}) - likely AI-generated.")
         else:
+            score += 5
             confidence_factors.append(0.75)
+            details.append(f"Face region frequencies within natural range (FFT={avg_fft:.1f}).")
         
         # Optical flow (motion naturalness)
-        if avg_flow < 0.4:
+        if avg_flow < 0.2:
+            score += 45
+            confidence_factors.append(0.85)
+            details.append(f"CRITICAL: Unnatural stasis detected (flow={avg_flow:.2f}) - suggests frame interpolation or puppet master techniques.")
+        elif avg_flow < 0.4:
             score += 25
-            confidence_factors.append(0.65)
-            details.append(f"Unnatural stillness detected (flow={avg_flow:.2f}).")
-        elif avg_flow > 12:
-            score += 20
-            confidence_factors.append(0.7)
-            details.append(f"Excessive motion artifacts (flow={avg_flow:.2f}).")
-        else:
             confidence_factors.append(0.75)
+            details.append(f"MODERATE: Reduced motion naturalness (flow={avg_flow:.2f}).")
+        elif avg_flow > 15:
+            score += 35
+            confidence_factors.append(0.8)
+            details.append(f"HIGH: Excessive motion instability (flow={avg_flow:.2f}) - consistent with synthetic motion.")
+        elif avg_flow > 12:
+            score += 15
+            confidence_factors.append(0.65)
+            details.append(f"MODERATE: Some motion artifacts (flow={avg_flow:.2f}).")
+        else:
+            score += 5
+            confidence_factors.append(0.75)
+            details.append(f"Natural motion patterns detected.")
         
         # Face consistency
-        if face_inconsistency > 1:
-            score += 15
-            confidence_factors.append(0.6)
-            details.append(f"Face tracking inconsistency (Δ={face_inconsistency:.1f}).")
+        if face_inconsistency > 2:
+            score += 45
+            confidence_factors.append(0.85)
+            details.append(f"CRITICAL: Severe face tracking instability (Δ={face_inconsistency:.1f}) - face may be swapped or synthetic.")
+        elif face_inconsistency > 1:
+            score += 25
+            confidence_factors.append(0.75)
+            details.append(f"MODERATE: Face tracking inconsistency (Δ={face_inconsistency:.1f}) noted.")
+        else:
+            score += 5
+            confidence_factors.append(0.75)
+            details.append(f"Stable face tracking throughout.")
         
         avg_confidence = np.mean(confidence_factors) * 100 if confidence_factors else 50
         
@@ -217,9 +260,9 @@ def analyze_video_enhanced(filepath):
             'confidence': int(avg_confidence),
             'details': " ".join(details),
             'method': 'Multi-Frame FFT + Optical Flow + Face Tracking',
-            'avg_blur': round(avg_blur, 2),
-            'avg_fft': round(avg_fft, 2),
-            'avg_flow': round(avg_flow, 3)
+            'avg_blur': float(round(avg_blur, 2)),
+            'avg_fft': float(round(avg_fft, 2)),
+            'avg_flow': float(round(avg_flow, 3))
         }
     except Exception as e:
         return {'score': 0, 'confidence': 0, 'details': f'Error: {str(e)}', 'method': 'Failed'}
@@ -263,39 +306,64 @@ def analyze_audio_enhanced(filepath):
         details = []
         
         # MFCC variance (robotic detection)
-        if avg_mfcc_var < 150:
-            score += 45
-            confidence_factors.append(0.8)
-            details.append(f"Low voice variance (σ²={avg_mfcc_var:.1f}) suggests synthetic speech.")
+        if avg_mfcc_var < 100:
+            score += 70
+            confidence_factors.append(0.95)
+            details.append(f"CRITICAL: Extremely low voice variance (σ²={avg_mfcc_var:.1f}) - definitive synthetic speech (TTS/Voice Clone).")
+        elif avg_mfcc_var < 150:
+            score += 50
+            confidence_factors.append(0.9)
+            details.append(f"VERY HIGH: Low voice variance (σ²={avg_mfcc_var:.1f}) strongly suggests neural network speech synthesis.")
         elif avg_mfcc_var < 250:
-            score += 20
-            confidence_factors.append(0.65)
-            details.append(f"Moderate voice variance (σ²={avg_mfcc_var:.1f}).")
-        else:
+            score += 25
             confidence_factors.append(0.75)
+            details.append(f"MODERATE: Somewhat reduced voice variance (σ²={avg_mfcc_var:.1f}).")
+        else:
+            score += 5
+            confidence_factors.append(0.7)
             details.append(f"Voice variance within natural range (σ²={avg_mfcc_var:.1f}).")
         
         # Spectral rolloff (bandwidth check)
-        if rolloff_mean < 2500:
-            score += 25
+        if rolloff_mean < 1500:
+            score += 40
+            confidence_factors.append(0.85)
+            details.append(f"CRITICAL: Very low bandwidth (rolloff={rolloff_mean:.0f}Hz) - characteristic of low-quality TTS.")
+        elif rolloff_mean < 2500:
+            score += 20
             confidence_factors.append(0.7)
-            details.append(f"Low bandwidth (rolloff={rolloff_mean:.0f}Hz) - potential low-quality TTS.")
+            details.append(f"MODERATE: Low bandwidth (rolloff={rolloff_mean:.0f}Hz) - potential low-quality TTS.")
         else:
+            score += 5
             confidence_factors.append(0.75)
+            details.append(f"Bandwidth within natural range (rolloff={rolloff_mean:.0f}Hz).")
         
         # Pitch variance (prosody naturalness)
-        if pitch_var < 500:
-            score += 20
-            confidence_factors.append(0.65)
-            details.append(f"Monotone pitch pattern (var={pitch_var:.0f}) - unnatural prosody.")
+        if pitch_var < 300:
+            score += 50
+            confidence_factors.append(0.9)
+            details.append(f"CRITICAL: Extremely monotone pitch (var={pitch_var:.0f}) - synthetic speech signature.")
+        elif pitch_var < 500:
+            score += 30
+            confidence_factors.append(0.8)
+            details.append(f"HIGH: Monotone pitch pattern (var={pitch_var:.0f}) - unnaturally flat prosody.")
         else:
+            score += 5
             confidence_factors.append(0.7)
+            details.append(f"Natural pitch variation detected (var={pitch_var:.0f}).")
         
         # ZCR consistency
-        if zcr_std < 0.01:
-            score += 10
-            confidence_factors.append(0.6)
-            details.append(f"Unnaturally consistent ZCR (σ={zcr_std:.4f}).")
+        if zcr_std < 0.005:
+            score += 35
+            confidence_factors.append(0.85)
+            details.append(f"CRITICAL: Unnaturally perfect ZCR consistency (σ={zcr_std:.5f}) - robotic speech indicator.")
+        elif zcr_std < 0.01:
+            score += 15
+            confidence_factors.append(0.7)
+            details.append(f"MODERATE: Unusually consistent ZCR (σ={zcr_std:.4f}).")
+        else:
+            score += 5
+            confidence_factors.append(0.75)
+            details.append(f"Natural ZCR variation.")
         
         avg_confidence = np.mean(confidence_factors) * 100 if confidence_factors else 50
         
@@ -304,10 +372,10 @@ def analyze_audio_enhanced(filepath):
             'confidence': int(avg_confidence),
             'details': " ".join(details),
             'method': 'MFCC + Prosody + Spectral Analysis',
-            'mfcc_variance': round(avg_mfcc_var, 2),
-            'pitch_variance': round(pitch_var, 2),
-            'rolloff_mean': round(rolloff_mean, 2),
-            'sample_rate': sr
+            'mfcc_variance': float(round(avg_mfcc_var, 2)),
+            'pitch_variance': float(round(pitch_var, 2)),
+            'rolloff_mean': float(round(rolloff_mean, 2)),
+            'sample_rate': int(sr)
         }
     except Exception as e:
         return {'score': 0, 'confidence': 0, 'details': f'Error: {str(e)}', 'method': 'Failed'}
