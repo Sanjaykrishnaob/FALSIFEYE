@@ -8,16 +8,22 @@ RUN apt-get update && apt-get install -y \
     libportaudio2 \
     libjack-jackd2-0 \
     git \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . /app/
+# Copy requirements first (Docker layer caching optimization)
+COPY falsifeye/requirements.txt /app/
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r falsifeye/requirements.txt
+# Install Python dependencies with pre-built wheels (faster than compiling)
+# Use --no-build-isolation and platform tags to speed up torch/numpy installation
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy project files after deps (keeps layer cache fresh during development)
+COPY . /app/
 
 # Create uploads directory
 RUN mkdir -p /app/falsifeye/uploads
